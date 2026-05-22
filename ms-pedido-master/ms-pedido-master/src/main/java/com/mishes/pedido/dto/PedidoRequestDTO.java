@@ -2,6 +2,7 @@ package com.mishes.pedido.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,8 @@ public class PedidoRequestDTO {
     @NotNull @Positive
     private Integer cantidad;
 
+    @PositiveOrZero // 🌟 AGREGA ESTA LÍNEA MÁGICA: Permite que el precio sea dinámico opcionalmente
+    private Double precioUnitario;
+
+    private String nombreProducto;
 }

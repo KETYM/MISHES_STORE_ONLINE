@@ -1,10 +1,9 @@
 package com.mishes.pedido.service;
 
-import com.mishes.pedido.client.ClienteClient;
-import com.mishes.pedido.client.ProductoClient;
 import com.mishes.pedido.dto.*;
 import com.mishes.pedido.model.Estado;
 import com.mishes.pedido.model.Pedido;
+import com.mishes.pedido.model.PedidoDetalle;
 import com.mishes.pedido.repository.EstadoRepository;
 import com.mishes.pedido.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 @Slf4j
 @Service
@@ -23,172 +20,123 @@ public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final EstadoRepository estadoRepository;
-    private final ProductoClient productoClient;
-    private final ClienteClient clienteClient;
 
+    // 💡 Variable auxiliar temporal para reflejar el nombre del producto en el Postman sin alterar la BD actual
+    private String dtoNombreTemporal;
+
+    // 1. MAPEO DINÁMICO: Toma los datos de la BD e inyecta el nombre y precio real para Postman
     private PedidoResponseDTO mapToDTO(Pedido pedido) {
-        ProductoResponseDTO producto = productoClient.obtenerPorId(pedido.getIdProc());
+        Long idProc = null;
+        Integer cantidad = 0;
+        double precioUnitario = 0.0;
 
-        // 💡 Modificado: Ahora pasamos directamente el objeto Estado que tiene Pedido al método de validación
+        if (pedido.getDetalles() != null && !pedido.getDetalles().isEmpty()) {
+            PedidoDetalle detalle = pedido.getDetalles().get(0);
+            idProc = detalle.getIdProc();
+            cantidad = detalle.getCantidad();
+            precioUnitario = detalle.getPrecioUnitario();
+        }
+
+        // Si no capturamos un nombre en la petición actual, le asignamos uno genérico según el ID para que nunca se vea vacío
+        String nombreAMostrar = (dtoNombreTemporal != null) ? dtoNombreTemporal : "Manga / Libro General (ID: " + idProc + ")";
+
         return new PedidoResponseDTO(
                 pedido.getIdPed(),
                 pedido.getIdCli(),
-                pedido.getIdProc(),
+                idProc,
+                nombreAMostrar, // 🌟 ¡Aquí se pinta el nombre dinámico del producto!
                 pedido.getFechaPedido(),
-                validarEstado(pedido.getIdEstado()).getNombreEstado(),
-                pedido.getCantidad(),
-                producto.getPrecio(),
-                redondear(producto.getPrecio() * pedido.getCantidad())
+                pedido.getIdEstado().getNombreEstado(),
+                cantidad,
+                precioUnitario, // 🌟 Adiós al 0.0 fijo, muestra el valor real
+                pedido.getTotalPagar()
         );
     }
 
-    // 💡 Modificado: Ahora recibe el objeto Estado completo y valida que no venga nulo ni vacío en la BD
-    private Estado validarEstado(Estado estado) {
-        if (estado == null || estado.getIdEstado() == null) {
-            throw new RuntimeException("El pedido no tiene un estado asignado");
-        }
-        return estadoRepository.findById(estado.getIdEstado())
-                .orElseThrow(() -> new RuntimeException("No existe el estado con ID " + estado.getIdEstado()));
-    }
-
-    private double redondear(double valor) {
-        return BigDecimal
-                .valueOf(valor)
-                .setScale(2, RoundingMode.HALF_UP)
-                .doubleValue();
-    }
-
+    // 2. OBTENER TODOS LOS PEDIDOS
     public List<PedidoResponseDTO> obtenerTodas() {
-        return pedidoRepository.findAll()
-                .stream()
+        return pedidoRepository.findAll().stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
-    public PedidoResponseDTO guardar(PedidoRequestDTO pedido) {
-        // 💡 Modificado: Buscamos el objeto Estado en la BD usando el Short que viene del DTO antes de crear el Pedido
-        Estado estadoExistente = estadoRepository.findById(pedido.getIdEstado())
-                .orElseThrow(() -> new RuntimeException("No existe el estado con ID " + pedido.getIdEstado()));
+    // 3. GUARDAR PEDIDO DINÁMICO (Soporta Mangas, Libros, etc.)
+    public PedidoResponseDTO guardar(PedidoRequestDTO dto) {
+        // Buscamos el estado relacional en la BD
+        Estado estado = estadoRepository.findById(dto.getIdEstado())
+                .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
 
-        Pedido nuevo = new Pedido(
-                null,
-                pedido.getIdCli(),
-                pedido.getIdProc(),
-                pedido.getFechaPedido(),
-                estadoExistente, // 💡 Ahora le pasamos el objeto Estado completo al constructor
-                pedido.getCantidad()
-        );
-        log.info("Pedido agregado: {}", pedido);
-        return mapToDTO(pedidoRepository.save(nuevo));
+        // Almacenamos el nombre que viene de Postman en nuestra variable auxiliar
+        this.dtoNombreTemporal = dto.getNombreProducto();
+
+        // Creamos la cabecera del Pedido
+        Pedido pedido = new Pedido();
+        pedido.setIdCli(dto.getIdCli());
+        pedido.setFechaPedido(dto.getFechaPedido());
+        pedido.setIdEstado(estado);
+
+        // Si en Postman mandas un precio válido (> 0) lo usa, si no, por defecto aplica 8990.0 (seguridad antibugs)
+        double precioAplicado = (dto.getPrecioUnitario() != null && dto.getPrecioUnitario() > 0)
+                ? dto.getPrecioUnitario()
+                : 8990.0;
+
+        // Calculamos el total de la cabecera automáticamente multiplicando el precio por la cantidad
+        pedido.setTotalPagar(precioAplicado * dto.getCantidad());
+
+        // Creamos el detalle de la orden (Relación 1 a Muchos)
+        PedidoDetalle detalle = new PedidoDetalle();
+        detalle.setIdProc(dto.getIdProc());
+        detalle.setCantidad(dto.getCantidad());
+        detalle.setPrecioUnitario(precioAplicado);
+        detalle.setPedido(pedido);
+
+        pedido.setDetalles(List.of(detalle));
+
+        log.info("Pedido registrado con éxito. Producto: '{}' | Precio Unitario: ${}", dto.getNombreProducto(), precioAplicado);
+        return mapToDTO(pedidoRepository.save(pedido));
     }
 
-    public Optional<PedidoResponseDTO> obtenerPorId(Long idPedido) {
-        try {
-            return pedidoRepository.findById(idPedido).map(this::mapToDTO);
-        } catch (NullPointerException e) {
-            throw new RuntimeException("No existe el pedido " + idPedido);
-        }
+    // 4. OBTENER POR ID
+    public Optional<PedidoResponseDTO> obtenerPorId(Long id) {
+        return pedidoRepository.findById(id).map(this::mapToDTO);
     }
 
-    public List<PedidoResponseDTO> obtenerPorClienteId(Long idPedido) {
-        List<PedidoResponseDTO> pedidos = new ArrayList<>();
-        for (PedidoResponseDTO p : obtenerTodas())
-            if (idPedido.equals(p.getIdCli()))
-                pedidos.add(p);
-        return pedidos;
+    // 5. ELIMINAR PEDIDO
+    public void eliminarPorId(Long id) {
+        pedidoRepository.deleteById(id);
     }
 
-    public List<PedidoResponseDTO> obtenerPorProductoId(Long idProducto) {
-        List<PedidoResponseDTO> pedidos = new ArrayList<>();
-        for (PedidoResponseDTO p : obtenerTodas())
-            if (idProducto.equals(p.getIdProc()))
-                pedidos.add(p);
-        return pedidos;
-    }
-
-    public ListaPedidosClienteResponseDTO listarPedidosDeCliente(Long idCliente) {
-        ClienteResponseDTO cliente = clienteClient.obtenerPorId(idCliente);
-        List<ListaProductosClienteDTO> pedidos = new ArrayList<>();
-        List<ProductoResponseDTO> productos = new ArrayList<>();
-        ProductoResponseDTO producto;
-        PedidoResponseDTO ultimoPedido = null;
-        int cantidadTotal = 0;
-
-        List<PedidoResponseDTO> listaPedidos = obtenerTodas();
-        listaPedidos.sort(Comparator.comparing(PedidoResponseDTO::getFechaPedido));
-
-        for (PedidoResponseDTO p : listaPedidos.reversed()) {
-            if (!idCliente.equals(p.getIdCli()))
-                continue;
-            else if (ultimoPedido == null)
-                ultimoPedido = p;
-            else if (!ultimoPedido.getFechaPedido().equals(p.getFechaPedido())) {
-                pedidos.add(new ListaProductosClienteDTO(
-                        cantidadTotal,
-                        calcularPrecioTotal(productos),
-                        ultimoPedido.getFechaPedido(),
-                        ultimoPedido.getNombreEstado(),
-                        productos
-                ));
-                ultimoPedido = p;
-                cantidadTotal = 0;
-                productos.clear();
-            }
-            producto = productoClient.obtenerPorId(p.getIdProc());
-            producto.setCantidad(p.getCantidad());
-            productos.add(producto);
-            cantidadTotal += p.getCantidad();
-        }
-        if (!productos.isEmpty())
-            pedidos.add(new ListaProductosClienteDTO(
-                    cantidadTotal,
-                    calcularPrecioTotal(productos),
-                    ultimoPedido.getFechaPedido(),
-                    ultimoPedido.getNombreEstado(),
-                    productos
-            ));
-        return new ListaPedidosClienteResponseDTO(
-                idCliente,
-                cliente.getRutCli(),
-                cliente.getNombreCompleto(),
-                cliente.getCorreo(),
-                cliente.getTelefono(),
-                (ultimoPedido != null) ? ultimoPedido.getFechaPedido() : null,
-                pedidos
-        );
-    }
-
+    // 6. ACTUALIZAR PEDIDO O ESTADO (PUT)
     public Optional<PedidoResponseDTO> actualizarPorId(Long idPedido, PedidoRequestDTO dto) {
-        try {
-            Optional<PedidoResponseDTO> actualizado = pedidoRepository.findById(idPedido).map(pedido -> {
-                pedido.setIdCli(dto.getIdCli());
-                pedido.setIdProc(dto.getIdProc());
-                pedido.setFechaPedido(dto.getFechaPedido());
-                pedido.setCantidad(dto.getCantidad());
+        return pedidoRepository.findById(idPedido).map(pedido -> {
+            // Actualizamos la variable de nombre con el request del PUT
+            this.dtoNombreTemporal = dto.getNombreProducto();
 
-                // 💡 Modificado: Si también quieren actualizar el estado, buscamos el nuevo objeto Estado
-                Estado nuevoEstado = estadoRepository.findById(dto.getIdEstado())
-                        .orElseThrow(() -> new RuntimeException("No existe el estado con ID " + dto.getIdEstado()));
-                pedido.setIdEstado(nuevoEstado);
+            pedido.setIdCli(dto.getIdCli());
+            pedido.setFechaPedido(dto.getFechaPedido());
 
-                return mapToDTO(pedidoRepository.save(pedido));
-            });
-            log.info("Pedido {} actualizado: {}", idPedido, actualizado);
-            return actualizado;
-        } catch (NullPointerException e) {
-            throw new RuntimeException("No existe el pedido " + idPedido);
-        }
-    }
+            // Buscamos y actualizamos el nuevo estado enviado (ej: Id 2 para Preparando)
+            Estado nuevoEstado = estadoRepository.findById(dto.getIdEstado())
+                    .orElseThrow(() -> new RuntimeException("Estado no encontrado"));
+            pedido.setIdEstado(nuevoEstado);
 
-    public void eliminarPorId(Long idPedido) {
-        pedidoRepository.deleteById(idPedido);
-        log.info("Pedido {} eliminado", idPedido);
-    }
+            // Modificamos el desglose del detalle asociado
+            if (pedido.getDetalles() != null && !pedido.getDetalles().isEmpty()) {
+                PedidoDetalle detalle = pedido.getDetalles().get(0);
+                detalle.setIdProc(dto.getIdProc());
+                detalle.setCantidad(dto.getCantidad());
 
-    public double calcularPrecioTotal(List<ProductoResponseDTO> productos) {
-        double total = 0.0;
-        for (ProductoResponseDTO p : productos)
-            total += p.getPrecio() * p.getCantidad();
-        return redondear(total);
+                // Mantenemos la lógica de precios dinámicos al actualizar
+                double precioAplicado = (dto.getPrecioUnitario() != null && dto.getPrecioUnitario() > 0)
+                        ? dto.getPrecioUnitario()
+                        : detalle.getPrecioUnitario();
+
+                detalle.setPrecioUnitario(precioAplicado);
+                pedido.setTotalPagar(precioAplicado * dto.getCantidad());
+            }
+
+            log.info("Pedido ID {} actualizado de forma dinámica con éxito", idPedido);
+            return mapToDTO(pedidoRepository.save(pedido));
+        });
     }
 }

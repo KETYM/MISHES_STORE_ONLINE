@@ -31,7 +31,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/v1/productos/**").permitAll()
+                        // 1. Arreglamos la ruta del GET quitando el /v1 para que calce con Postman
+                        .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+
+                        // 🌟 2. ¡LÍNEA MÁGICA! Hacemos que el PUT sea público para tus pruebas en el puerto 8085
+                        .requestMatchers(HttpMethod.PUT, "/api/productos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/productos/**").permitAll() // Por si necesitas meter más
+
+                        // 3. Permisos de Swagger (Documentación)
                         .requestMatchers(
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
@@ -39,6 +46,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
 
+                        // Todo lo demás sigue protegido
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

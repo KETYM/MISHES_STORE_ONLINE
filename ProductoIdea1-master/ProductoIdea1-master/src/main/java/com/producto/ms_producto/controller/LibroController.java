@@ -43,4 +43,10 @@ public class LibroController {
     public ResponseEntity<Libro> obtenerPorId(@PathVariable Long id){
         return ResponseEntity.ok(libroRepository.findById(id).orElseThrow());
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Libro dto) {
+        return libroService.actualizarPorId(id, dto)
+                .map(libroActualizado -> ResponseEntity.ok(libroActualizado))
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

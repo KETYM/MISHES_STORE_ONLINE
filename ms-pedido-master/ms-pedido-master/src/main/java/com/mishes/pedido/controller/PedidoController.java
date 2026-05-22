@@ -1,6 +1,5 @@
 package com.mishes.pedido.controller;
 
-import com.mishes.pedido.dto.ListaPedidosClienteResponseDTO;
 import com.mishes.pedido.dto.PedidoRequestDTO;
 import com.mishes.pedido.dto.PedidoResponseDTO;
 import com.mishes.pedido.service.PedidoService;
@@ -21,24 +20,13 @@ public class PedidoController {
 
     private final PedidoService pedidoService;
 
-    // 1. LISTAR TODOS
+    // 1. LISTAR TODOS (GET http://localhost:8084/api/pedidos)
     @GetMapping
     public List<PedidoResponseDTO> obtenerTodas() {
         return pedidoService.obtenerTodas();
     }
 
-    // 2. BUSCAR POR PRODUCTO (Ruta corregida para evitar ambigüedad)
-    @GetMapping("/producto")
-    public List<PedidoResponseDTO> obtenerPorProductoId(@RequestParam Long productoId) {
-        return pedidoService.obtenerPorProductoId(productoId);
-    }
-
-    // 3. BUSCAR POR CLIENTE (Ruta corregida para evitar ambigüedad)
-    @GetMapping("/cliente")
-    public List<PedidoResponseDTO> obtenerPorClienteId(@RequestParam Long clienteId) {
-        return pedidoService.obtenerPorClienteId(clienteId);
-    }
-
+    // 2. BUSCAR POR ID (GET http://localhost:8084/api/pedidos/1)
     @GetMapping("{id}")
     public ResponseEntity<PedidoResponseDTO> obtenerPorId(@PathVariable Long id) {
         return pedidoService.obtenerPorId(id)
@@ -46,6 +34,7 @@ public class PedidoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // 3. CREAR PEDIDO (POST http://localhost:8084/api/pedidos)
     @PostMapping
     public ResponseEntity<PedidoResponseDTO> agregar(@Valid @RequestBody PedidoRequestDTO pedido) {
         return ResponseEntity
@@ -53,6 +42,7 @@ public class PedidoController {
                 .body(pedidoService.guardar(pedido));
     }
 
+    // 4. ACTUALIZAR ESTADO O PEDIDO (PUT http://localhost:8084/api/pedidos/1)
     @PutMapping("{id}")
     public ResponseEntity<PedidoResponseDTO> actualizarPorId(@PathVariable Long id, @Valid @RequestBody PedidoRequestDTO pedido) {
         return pedidoService.actualizarPorId(id, pedido)
@@ -60,7 +50,7 @@ public class PedidoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 💡 ELIMINAR PEDIDO (Actualizado con tu firma con mensaje amigable)
+    // 5. ELIMINAR PEDIDO (DELETE http://localhost:8084/api/pedidos/1)
     @DeleteMapping("{id}")
     public ResponseEntity<Map<String, String>> eliminarPorId(@PathVariable Long id) {
         pedidoService.eliminarPorId(id);
@@ -69,10 +59,5 @@ public class PedidoController {
         respuesta.put("mensaje", "Pedido eliminado correctamente");
 
         return ResponseEntity.ok(respuesta);
-    }
-
-    @GetMapping("listar-pedidos")
-    public ListaPedidosClienteResponseDTO obtenerTotalCliente(@RequestParam Long clienteId) {
-        return pedidoService.listarPedidosDeCliente(clienteId);
     }
 }

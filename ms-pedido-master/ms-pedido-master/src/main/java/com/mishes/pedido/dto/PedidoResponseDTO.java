@@ -24,6 +24,8 @@ public class PedidoResponseDTO {
     @NotNull
     private Long idProc;
 
+    private String nombreProducto;
+
     @NotNull
     private LocalDateTime fechaPedido;
 
