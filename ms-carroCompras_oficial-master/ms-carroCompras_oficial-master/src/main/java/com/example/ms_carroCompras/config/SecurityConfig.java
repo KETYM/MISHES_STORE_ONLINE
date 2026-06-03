@@ -28,13 +28,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.setAllowedOrigins(java.util.List.of("*"));
+                    corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfig.setAllowedHeaders(java.util.List.of("*"));
+                    return corsConfig;
+                }))
                 .csrf(csrf -> csrf.disable()) // Desactivado para APIs REST
                 .authorizeHttpRequests(auth -> auth
-                        // 🚨 EL CAMBIAZO SEGURITO:
-                        .requestMatchers("/api/carrito/**").authenticated() // 🔒 Exige Token obligatorio para todo el carro
-                        .anyRequest().permitAll()
+                        //  Swagger
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
+                        .requestMatchers("/api/carrito/**").authenticated()
+
+                        .anyRequest().authenticated()
                 )
-                // 💡 Volvemos a encadenar el JwtFilter que maneja los tokens de tus compañeros
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

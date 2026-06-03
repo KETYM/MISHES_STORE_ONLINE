@@ -58,4 +58,11 @@ public class LibroService {
         });
 
     }
+    // 🌟 MÉTODO DELETE DEFINITIVO: Elimina un libro si existe
+    public void eliminarPorId(Long id) {
+        if (!libroRepository.existsById(id)) {
+            throw new RuntimeException("No se puede eliminar. El libro con ID " + id + " no existe.");
+        }
+        libroRepository.deleteById(id);
+    }
 }

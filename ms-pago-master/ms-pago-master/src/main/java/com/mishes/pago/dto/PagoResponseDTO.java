@@ -24,6 +24,9 @@ public class PagoResponseDTO {
     @NotNull
     private Long idCli;
 
+    @NotBlank
+    String nombreCliente;
+
     @NotNull
     private LocalDateTime fechaPago;
 

@@ -49,4 +49,14 @@ public class LibroController {
                 .map(libroActualizado -> ResponseEntity.ok(libroActualizado))
                 .orElse(ResponseEntity.notFound().build());
     }
+    // 🌟 5. ELIMINAR PRODUCTO POR ID (CRUD COMPLETO)
+    @DeleteMapping("/{id}")
+    public org.springframework.http.ResponseEntity<java.util.Map<String, String>> eliminar(@PathVariable Long id) {
+        libroService.eliminarPorId(id); // O como se llame tu método en el servicio (ej: productoService.delete(id))
+
+        java.util.HashMap<String, String> respuesta = new java.util.HashMap<>();
+        respuesta.put("mensaje", "Producto eliminado correctamente de Mishes Store");
+
+        return org.springframework.http.ResponseEntity.ok(respuesta);
+    }
 }

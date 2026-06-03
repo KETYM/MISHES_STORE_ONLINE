@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "mishes-cliente", url = "${param.clientes.url}")
+@FeignClient(name = "ms-usuario", url = "http://localhost:8081", configuration = com.mishes.pago.config.FeignConfig.class)
 public interface ClienteClient {
 
     @GetMapping("api/clientes/{id}")

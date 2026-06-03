@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/pagos")
@@ -39,12 +41,21 @@ public class PagoController {
         return pagoService.obtenerPorPedidoId(idPedido);
     }
 
-    // 🔗 POST http://localhost:8083/api/pagos
+    // 🌟 POST ACTUALIZADO: Usamos LinkedHashMap para garantizar el orden visual
     @PostMapping
-    public ResponseEntity<PagoResponseDTO> guardar(@Valid @RequestBody PagoRequestDTO pago) {
+    public ResponseEntity<Map<String, Object>> guardar(@Valid @RequestBody PagoRequestDTO pago) {
+        PagoResponseDTO pagoProcesado = pagoService.guardar(pago);
+
+        // 🛠️ Cambiamos HashMap por LinkedHashMap:
+        Map<String, Object> respuesta = new java.util.LinkedHashMap<>();
+
+        // Al escribir este primero, se garantiza que aparezca arriba en Postman:
+        respuesta.put("mensaje", "😊😊😊¡Compra realizada con éxito en Mishes Store! 🚀🌸");
+        respuesta.put("detallePago", pagoProcesado);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(pagoService.guardar(pago));
+                .body(respuesta);
     }
 
     // 🔗 PUT http://localhost:8083/api/pagos/{id}
@@ -55,11 +66,15 @@ public class PagoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 🔗 DELETE http://localhost:8083/api/pagos/{id}
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> eliminarPorId(@PathVariable Long id) {
+    // 🌟 DELETE CORREGIDO: Ahora devuelve un mensaje explícito de éxito en Postman
+    @DeleteMapping("/{id}")
+    public org.springframework.http.ResponseEntity<java.util.Map<String, String>> eliminarPorId(@PathVariable Long id) {
         pagoService.eliminarPorId(id);
-        return ResponseEntity.noContent().build();
+
+        java.util.HashMap<String, String> respuesta = new java.util.HashMap<>();
+        respuesta.put("mensaje", "El registro de pago fue eliminado correctamente de Mishes Store");
+
+        return org.springframework.http.ResponseEntity.ok(respuesta);
     }
 
     // 🔗 GET http://localhost:8083/api/pagos/lista-cliente?id=X
