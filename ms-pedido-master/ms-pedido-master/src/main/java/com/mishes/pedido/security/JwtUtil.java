@@ -4,20 +4,16 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
-
-//generar el token que Postman usará para autenticarse en el endpoint protegido.
-// El token se genera con una clave secreta y tiene una fecha de expiración. Además, el JwtUtil también tiene métodos para validar el token y extraer el nombre de usuario del token.
-
 
 @Component
 public class JwtUtil {
 
+    // 💡 1. Inyección de la clave secreta desde las propiedades (application.yml o application.yml)
     @Value("${jwt.secret}")
     private String secret;
 
-    // Método para validar el token (este ya lo tienes)
+    // 💡 2. Método estándar para validar la firma y expiración del token
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -30,7 +26,7 @@ public class JwtUtil {
         }
     }
 
-    // Método para extraer el username (este también lo tienes)
+    // 💡 3. Método para extraer el nombre de usuario (Subject) del token
     public String getUsernameFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
@@ -40,13 +36,40 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // 💡 2. Tu nuevo método definitivo para extraer el rol corregido
+    // 💡 4. Método definitivo y robusto para extraer y normalizar el rol del token
     public String getRolFromToken(String token) {
-        return Jwts.parserBuilder()
+        var claims = Jwts.parserBuilder()
                 .setSigningKey(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)))
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .get("rol", String.class);
+                .getBody();
+
+        Object rolesObject = null;
+
+        // Buscamos secuencialmente en las llaves más comunes de la industria
+        if (claims.get("roles") != null) {
+            rolesObject = claims.get("roles");
+        } else if (claims.get("rol") != null) {
+            rolesObject = claims.get("rol");
+        } else if (claims.get("authorities") != null) {
+            rolesObject = claims.get("authorities");
+        }
+
+        if (rolesObject == null) {
+            return "INVITADO"; // Valor por defecto seguro si el token no trae roles
+        }
+
+        String rolString = rolesObject.toString();
+
+        // Limpieza de caracteres por si viene empaquetado como lista: [ADMIN] o [ROLE_ADMIN]
+        rolString = rolString.replace("[", "").replace("]", "").trim();
+
+        // Remoción del prefijo "ROLE_" automático de Spring Security si existiera
+        if (rolString.startsWith("ROLE_")) {
+            rolString = rolString.substring(5);
+        }
+
+        // Retorna el rol perfectamente limpio y en mayúsculas (Ej: "ADMIN")
+        return rolString.toUpperCase();
     }
 }

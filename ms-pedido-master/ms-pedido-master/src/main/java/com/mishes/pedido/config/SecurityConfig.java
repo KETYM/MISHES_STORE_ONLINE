@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@org.springframework.stereotype.Component // 💡 Esto le asegura a Spring que es un componente vivo del sistema
 public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
@@ -22,21 +21,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Deshabilitamos CSRF porque manejamos Tokens sin estado
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.setAllowedOrigins(java.util.List.of("*"));
+                    corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfig.setAllowedHeaders(java.util.List.of("*"));
+                    return corsConfig;
+                }))
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // 💂️ Solo los usuarios con rol ADMIN pueden Crear, Modificar o Borrar pedidos
-                        .requestMatchers(HttpMethod.POST, "/api/pedidos/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/pedidos/**").hasAnyAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/pedidos/**").hasAnyAuthority("ADMIN")
+                        // 1. Rutas Públicas: Swagger abierto para el Gateway
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/error" // <-- ¡ESTO EVITA EL FALSO 403!
+                        ).permitAll()
 
-                        // 👥 Tanto ADMIN como CLIENTE pueden consultar el listado de pedidos y sus filtros
+                        // 2. Reglas de negocio: Pedidos
+                        // ADMIN puede modificar/eliminar
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/pedidos/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/pedidos/**").hasAuthority("ADMIN")
+
+                        // ADMIN y CLIENTE pueden consultar
                         .requestMatchers(HttpMethod.GET, "/api/pedidos/**").hasAnyAuthority("ADMIN", "CLIENTE")
 
-                        // Cualquier otra petición extraña requiere estar autenticado
+                        // 3. Cualquier otra cosa requiere autenticación
                         .anyRequest().authenticated()
                 )
-                // Enganchamos tu filtro JWT personalizado antes del validador por defecto de Spring
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

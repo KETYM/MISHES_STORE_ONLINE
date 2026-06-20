@@ -1,0 +1,113 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.oauth2.client.reactive.ReactiveOAuth2ClientAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.oauth2.resource.reactive.ReactiveOAuth2ResourceServerAutoConfiguration
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        # --- RUTAS DE NEGOCIO (Tus controladores) ---
+        - id: ms-usuario-route
+          uri: lb://MS-USUARIO
+          predicates:
+            - Path=/api/usuarios/**
+
+        - id: ms-cliente-route
+          uri: lb://MS-CLIENTE
+          predicates:
+            - Path=/api/clientes/**
+
+        - id: ms-pedido-route
+          uri: lb://MISHES-PEDIDO
+          predicates:
+            - Path=/api/pedidos/**
+
+        - id: ms-pago-route
+          uri: lb://MISHES-PAGO
+          predicates:
+            - Path=/api/pagos/**
+
+        - id: ms-producto-route
+          uri: lb://MS-PRODUCTO
+          predicates:
+            - Path=/api/productos/**
+
+        - id: ms-carro-route
+          uri: lb://MS-CARROCOMPRAS
+          predicates:
+            - Path=/api/carrito/**
+
+        # --- RUTAS EXCLUSIVAS DE SWAGGER (Inmunes a bugs) ---
+        - id: ms-usuario-swagger
+          uri: lb://MS-USUARIO
+          predicates:
+            - Path=/docs/usuario
+          filters:
+            - RewritePath=/docs/usuario, /v3/api-docs
+
+        - id: ms-cliente-swagger
+          uri: lb://MS-CLIENTE
+          predicates:
+            - Path=/docs/cliente
+          filters:
+            - RewritePath=/docs/cliente, /v3/api-docs
+
+        - id: ms-pedido-swagger
+          uri: lb://MISHES-PEDIDO
+          predicates:
+            - Path=/docs/pedido
+          filters:
+            - RewritePath=/docs/pedido, /v3/api-docs
+
+        - id: ms-pago-swagger
+          uri: lb://MISHES-PAGO
+          predicates:
+            - Path=/docs/pago
+          filters:
+            - RewritePath=/docs/pago, /v3/api-docs
+
+        - id: ms-producto-swagger
+          uri: lb://MS-PRODUCTO
+          predicates:
+            - Path=/docs/producto
+          filters:
+            - RewritePath=/docs/producto, /v3/api-docs
+
+        - id: ms-carro-swagger
+          uri: lb://MS-CARROCOMPRAS
+          predicates:
+            - Path=/docs/carrito
+          filters:
+            - RewritePath=/docs/carrito, /v3/api-docs
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# URLs limpias apuntando a las nuevas rutas seguras
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Usuario
+        url: /docs/usuario
+      - name: Cliente
+        url: /docs/cliente
+      - name: Pedido
+        url: /docs/pedido
+      - name: Pago
+        url: /docs/pago
+      - name: Producto
+        url: /docs/producto
+      - name: Carrito
+        url: /docs/carrito

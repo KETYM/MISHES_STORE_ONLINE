@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c9b235a8-b880-4cf5-8bfa-f30f93ec2a38" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../ProductoIdea1-master/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../eureka-server/.idea/eureka-server.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/FeignConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ms-pedido-master/.idea/ms-pedido-master.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/MsProductoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/MsProductoApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/controller/LibroController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/controller/LibroController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/security/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/security/JwtFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/services/LibroService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/java/com/producto/ms_producto/services/LibroService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ProductoIdea1-master/ProductoIdea1-master/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/java/com/gateway/api_gateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/java/com/gateway/api_gateway/ApiGatewayApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/MsCarroComprasApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/MsCarroComprasApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/controller/CarritoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/controller/CarritoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/security/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/security/JwtFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/services/CarritoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/java/com/example/ms_carroCompras/services/CarritoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-carroCompras_oficial-master/ms-carroCompras_oficial-master/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-cliente" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-cliente" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/PagoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/PagoApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/client/CarroClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/client/CarroClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/client/ClienteClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/client/ClienteClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/JwtFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/controller/PagoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/controller/PagoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/dto/PagoResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/dto/PagoResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/service/PagoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/java/com/mishes/pago/service/PagoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pago-master/ms-pago-master/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/PedidoApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/PedidoApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/config/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/controller/PedidoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/controller/PedidoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/security/JwtFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/security/JwtFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/security/JwtUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/security/JwtUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/service/PedidoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/java/com/mishes/pedido/service/PedidoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-pedido-master/ms-pedido-master/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ms-usuario" beforeDir="false" afterPath="$PROJECT_DIR$/../ms-usuario" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/janit/Desktop/MISHES_STORE/api-gateway" value="3FEkZFWCgqD3cBf2XSWSRxGlOHt" />
+    </persistenceIdMap>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "KETYM"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/KETYM/MISHES_STORE_ONLINE.git",
+    "accountId": "dbaf7e07-59f5-478e-93a5-0f1b9aaf7daf"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="3FEkZFWCgqD3cBf2XSWSRxGlOHt" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.ApiGatewayApplication.executor": "Run",
+    "Maven.api-gateway [clean].executor": "Run",
+    "Maven.api-gateway [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c9b235a8-b880-4cf5-8bfa-f30f93ec2a38" name="Changes" comment="" />
+      <created>1781647670542</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1781647670542</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

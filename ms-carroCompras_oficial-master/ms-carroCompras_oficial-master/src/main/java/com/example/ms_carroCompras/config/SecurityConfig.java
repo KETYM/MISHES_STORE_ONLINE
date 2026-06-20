@@ -28,13 +28,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Desactivado para APIs REST
+                .cors(cors -> cors.configurationSource(request -> {
+                    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                    corsConfig.setAllowedOrigins(java.util.List.of("*"));
+                    corsConfig.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    corsConfig.setAllowedHeaders(java.util.List.of("*"));
+                    return corsConfig;
+                }))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // 🚨 EL CAMBIAZO SEGURITO:
-                        .requestMatchers("/api/carrito/**").authenticated() // 🔒 Exige Token obligatorio para todo el carro
-                        .anyRequest().permitAll()
+                        // 1. Rutas Públicas: Swagger primero
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/error" // <-- ¡ESTO EVITA EL FALSO 403!
+                        ).permitAll()
+
+                        // 2. Reglas de negocio
+                        .requestMatchers("/api/carrito/**").authenticated()
+
+                        // 3. Cualquier otra requiere token
+                        .anyRequest().authenticated()
                 )
-                // 💡 Volvemos a encadenar el JwtFilter que maneja los tokens de tus compañeros
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

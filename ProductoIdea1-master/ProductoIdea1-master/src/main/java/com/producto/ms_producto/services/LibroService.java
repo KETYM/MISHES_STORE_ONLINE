@@ -41,8 +41,7 @@ public class LibroService {
 
     public Libro buscarPorIsbn(String isbn){
         return libroRepository.findByIsbn(isbn)
-                .orElseThrow(() -> new RecursoDuplicadoException("No encontramos el libro con ISBN: " + isbn));
-    }
+                .orElseThrow(() -> new RuntimeException("No encontramos el libro con ISBN: " + isbn));    }
     // MÉTODO PUT FINAL: Totalmente compatible con la estructura de tu grupo
     public java.util.Optional<Libro> actualizarPorId(Long id, Libro dto) {
         // Buscamos el repositorio usando el nombre exacto que tus compañeros le pusieron en este archivo
@@ -57,5 +56,12 @@ public class LibroService {
             return libroRepository.save(libroExistente);
         });
 
+    }
+    // 🌟 MÉTODO DELETE DEFINITIVO: Elimina un libro si existe
+    public void eliminarPorId(Long id) {
+        if (!libroRepository.existsById(id)) {
+            throw new RuntimeException("No se puede eliminar. El libro con ID " + id + " no existe.");
+        }
+        libroRepository.deleteById(id);
     }
 }

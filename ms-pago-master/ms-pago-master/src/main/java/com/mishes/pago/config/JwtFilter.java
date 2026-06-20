@@ -24,6 +24,12 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        // 1.ESTE BLOQUE: Ignorar filtro para Swagger y API Docs
+        String path = request.getRequestURI();
+        if (path.contains("/v3/api-docs") || path.contains("/swagger-ui")) {
+            filterChain.doFilter(request, response);
+            return; // Sale del filtro y permite la petición
+        }
 
         String authHeader = request.getHeader("Authorization");
 
